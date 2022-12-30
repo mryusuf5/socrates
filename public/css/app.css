@@ -1,0 +1,39 @@
+.quote{
+  background: -webkit-linear-gradient(#F48131, #ECC896);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-image{
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  width: 100%;
+}
+
+.button-cover{
+  background: linear-gradient(to bottom, #F48131, #ECC896);
+  transition: .5s;
+}
+
+.text-image{
+  width: 50%;
+}
+
+.logo{
+  width: 150px;
+}
+
+.cardImage{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 300px;
+}
+
+@media only screen and (max-width: 992px){
+  .text-image{
+    width: 100%;
+  }
+}
