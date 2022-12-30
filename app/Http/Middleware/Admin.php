@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class Admin
 {
@@ -16,14 +17,20 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Session::get("user")->level == 1)
+        if(Session::get("user"))
         {
-            return $next($request);
+            if(Session::get("user")->level == 1)
+            {
+                return $next($request);
+            }
+            else
+            {
+                return redirect()->route("home");
+            }
         }
         else
         {
             return redirect()->route("home");
         }
-
     }
 }

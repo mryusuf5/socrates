@@ -14,26 +14,42 @@
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img class="logo" src="{{asset("images/socrates-seperate.png")}}" alt=""></a>
+            <a class="navbar-brand" href="{{route("home")}}"><img class="logo" src="{{asset("images/socrates-seperate.png")}}" alt=""></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                <a class="nav-link {{Route::is("home") ? "active" : ""}}" href="{{route("home")}}">Home</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link {{Route::is("artikelen") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/magic-truffles">Magic truffles</a>
-                </li>
-            </ul>
-            <div class="d-flex gap-2 align-items-center">
-                <a href="/login" class="btn btn-primary">Login</a>
-                <a href="/register" class="btn btn-outline-secondary">Register</a>
-            </div>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                    <a class="nav-link {{Route::is("home") ? "active" : ""}}" href="{{route("home")}}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link {{Route::is("artikelen") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/magic-truffles">Magic truffles</a>
+                    </li>
+                </ul>
+                @if(!Session::get("user"))
+                <div class="d-flex gap-2 align-items-center">
+                    <a href="{{route("loginView")}}" class="btn btn-primary">Login</a>
+                    <a href="{{route("registerView")}}" class="btn btn-outline-secondary">Register</a>
+                </div>
+                @else
+                <div class="dropdown">
+                    <a href="" data-bs-toggle="dropdown" class="text-white dropdown-toggle">{{Session::get("user")->name . " " . Session::get("user")->prefix . " " . Session::get("user")->lastname}}</a>
+                    <ul class="dropdown-menu dropdown-menu-lg-end">
+                        @if(Session::get("user")->level == 1)
+                        <li class="dropdown-item">
+                            <a href="{{route("admin.dashboard")}}">Dashboard</a>
+                        </li>
+                        @endif
+                        <li class="dropdown-item">
+                            <a href="{{route("logout")}}">Uitloggen</a>
+                        </li>
+                    </ul>
+                </div>
+                @endif
             </div>
         </div>
     </nav>

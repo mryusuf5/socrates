@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,11 @@ use App\Http\Controllers\ProductsController;
 */
 
 Route::get("/", [ProductsController::class, "home"])->name("home");
+Route::get("/login", [UserController::class, "loginView"])->name("loginView");
+Route::get("/register", [UserController::class, "registerView"])->name("registerView");
+Route::post("/login", [UserController::class, "login"]);
+Route::post("/register", [UserController::class, "register"]);
+Route::get("logout", [UserController::class, "logout"])->name("logout");
 
 Route::get("/artikelen", [ProductsController::class, "allItems"])->name("artikelen");
 
@@ -38,8 +44,10 @@ Route::get("/magic-truffles", function(){
     return view("user.magic-truffles");
 });
 
-Route::group("admin");
+Route::prefix("/admin")->name("admin.")->middleware("admin")->group(function(){
+    Route::get("", [ProductsController::class, "index"])->name("dashboard");
+});
 
-Route::get("/admin", [ProductsController::class, "index"]);
+
 
 Route::resource("products", ProductsController::class);
