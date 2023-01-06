@@ -25,7 +25,7 @@
                 <input type="password" name="password" class="form-control">
                 <span class="text-danger">@error("password"){{$message}}@enderror</span>
             </div>
-            <input type="submit" value="Registreren" class="btn btn-primary w-50">
+            <input type="submit" value="Inloggen" class="btn btn-primary w-50">
         </form>
     </div>
     <br>

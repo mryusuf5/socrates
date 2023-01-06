@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="card-title fw-bold fs-4">{{$product->name}}</div>
                         <p>{{Str::limit($product->description, 45)}}</p>
-                        <a href="#" class="btn btn-primary">Toevoegen aan winkelmand</a>
+                        <a href="{{route("singleItem", $product->id)}}" class="btn btn-primary">Product bekijken</a>
                     </div>
                 </div>
             @endforeach
