@@ -19,7 +19,7 @@
                     <tr>
                         <td>{{$product->id}}</td>
                         <td>{{$product->name}}</td>
-                        <td>{{$product->description}}</td>
+                        <td>{{Str::limit($product->description, 60)}}</td>
                         <td><a href="{{route("products.edit", $product->id)}}" class="btn btn-primary">Aanpassen</a></td>
                     </tr>
                 @endforeach

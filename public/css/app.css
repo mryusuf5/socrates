@@ -31,9 +31,72 @@
     width: 100%;
     height: 300px;
 }
+.singleProductImage{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 500px;
+    width: 500px;
+}
+
+.singleProductImageSmall{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 75px;
+    width: 75px;
+}
 
 @media only screen and (max-width: 992px){
   .text-image{
     width: 100%;
   }
+  .singleProductImage{
+    height: 300px;
+    width: 300px;
+  }
+  .singleProductImageSmall{
+      height: 50px;
+      width: 50px;
+  }
+}
+
+.rating {
+    float:left;
+    border:none;
+}
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0, 0, 0, 0);
+}
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+}
+.rating:not(:checked) > label:before {
+    content:'★ ';
+}
+.rating > input:checked ~ label {
+    color: #f70;
+}
+.rating:not(:checked) > label:hover, .rating:not(:checked) > label:hover ~ label {
+    color: gold;
+}
+.rating > input:checked + label:hover, .rating > input:checked + label:hover ~ label, .rating > input:checked ~ label:hover, .rating > input:checked ~ label:hover ~ label, .rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+}
+.rating > label:active {
+    position:relative;
+}
+
+.singleProductImageSmall:hover{
+    cursor: pointer;
 }

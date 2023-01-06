@@ -22,6 +22,10 @@
                 <input type="number" name="amount" placeholder="Voorraad" class="form-control">
             </div>
             <div class="form-group col-5">
+                <label>Prijs:</label>
+                <input type="number" step=".01" name="price" placeholder="Prijs" class="form-control">
+            </div>
+            <div class="form-group col-5">
                 <label>Foto:</label>
                 <input type="file" name="image" placeholder="Foto" class="form-control">
             </div>

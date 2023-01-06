@@ -21,8 +21,9 @@ Route::get("/register", [UserController::class, "registerView"])->name("register
 Route::post("/login", [UserController::class, "login"]);
 Route::post("/register", [UserController::class, "register"]);
 Route::get("logout", [UserController::class, "logout"])->name("logout");
-
 Route::get("/artikelen", [ProductsController::class, "allItems"])->name("artikelen");
+Route::get("/artikelen/{artikelId}", [ProductsController::class, "singleItem"])->name("singleItem");
+Route::post("/artikelen/{artikelId}/review", [ProductsController::class, "singleItemReview"])->name("singleItemReview");
 
 Route::get("/algemene-voorwaarden", function(){
     return view("user.algemene-voorwaarden");
@@ -51,3 +52,5 @@ Route::prefix("/admin")->name("admin.")->middleware("admin")->group(function(){
 
 
 Route::resource("products", ProductsController::class);
+Route::post("products/{productId}/edit/images", [ProductsController::class, "multipleImagesSingleItem"])->name("multipleImages");
+Route::post("products/{productId}/edit/delete", [ProductsController::class, "deleteProductImage"])->name("deleteProductImage");

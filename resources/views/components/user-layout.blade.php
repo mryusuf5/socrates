@@ -9,6 +9,7 @@
         <!-- Styles -->
         <link href="{{asset("css/bootstrap.css")}}" rel="stylesheet">
         <link href="{{asset("css/app.css")}}" rel="stylesheet">
+        <link rel="icon" href="{{asset("images/socrates-loader.png")}}">
         <script src="https://kit.fontawesome.com/e0462e4fee.js" crossorigin="anonymous"></script>
     </head>
     <body>
@@ -21,13 +22,10 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                    <a class="nav-link {{Route::is("home") ? "active" : ""}}" href="{{route("home")}}">Home</a>
+                        <a class="nav-link {{Route::is("home") ? "active" : ""}}" href="{{route("home")}}">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link {{Route::is("artikelen") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="/magic-truffles">Magic truffles</a>
+                        <a class="nav-link {{Route::is("artikelen") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
                     </li>
                 </ul>
                 @if(!Session::get("user"))
@@ -40,12 +38,17 @@
                     <a href="" data-bs-toggle="dropdown" class="text-white dropdown-toggle">{{Session::get("user")->name . " " . Session::get("user")->prefix . " " . Session::get("user")->lastname}}</a>
                     <ul class="dropdown-menu dropdown-menu-lg-end">
                         @if(Session::get("user")->level == 1)
-                        <li class="dropdown-item">
-                            <a href="{{route("admin.dashboard")}}">Dashboard</a>
+                        <li class="">
+                            <a class="dropdown-item" href="{{route("admin.dashboard")}}">Dashboard</a>
                         </li>
                         @endif
-                        <li class="dropdown-item">
-                            <a href="{{route("logout")}}">Uitloggen</a>
+                        <li>
+                            <a href="" class="dropdown-item">
+                                Mijn winkelwagen
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="dropdown-item" href="{{route("logout")}}">Uitloggen</a>
                         </li>
                     </ul>
                 </div>
@@ -61,5 +64,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{asset("scripts/script.js")}}"></script>
     </body>
 </html>

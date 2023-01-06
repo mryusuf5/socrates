@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductImages;
 use App\Models\Products;
+use App\Models\Reviews;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class ProductsController extends Controller
 {
@@ -25,7 +29,8 @@ class ProductsController extends Controller
             "name" => "required",
             "description" => "required",
             "image" => "required",
-            "amount" => "required"
+            "amount" => "required",
+            "price" => "required"
         ]);
 
         $file = $request->file("image");
@@ -38,6 +43,7 @@ class ProductsController extends Controller
         $product->description = $request->input("description");
         $product->amount = $request->input("amount");
         $product->image = $filename;
+        $product->price = $request->input("price");
         $product->save();
 
         return redirect()->route("products.index")->with("success", "Product is aangemaakt.");
@@ -50,19 +56,44 @@ class ProductsController extends Controller
 
     public function edit(Products $product)
     {
-        return view("admin.edit", compact("product"));
+        $productImages = ProductImages::where("productId", $product->id)->get();
+        return view("admin.edit", compact("product", "productImages"));
     }
 
-    public function update(Request $request, Products $product)
+    public function update(Request $request, $id)
     {
         $request->validate([
             "name" => "required",
             "description" => "required",
-            "image" => "required",
-            "amount" => "required"
+            "amount" => "required",
+            "price" => "required"
         ]);
 
-        $product->update($request->all());
+        if(!$request->image)
+        {
+            $product = Products::find($id);
+            $product->name = $request->input("name");
+            $product->description = $request->input("description");
+            $product->amount = $request->input("amount");
+            $product->image = $request->input("hiddenImage");
+            $product->price = $request->input("price");
+            $product->save();
+
+            return redirect()->route("products.index")->with("success", "Product is aangepast.");
+        }
+
+        $file = $request->file("image");
+        $extension = $request->file("image")->getClientOriginalExtension();
+        $filename = time(). ".".$extension;
+        $file->move("images/products/", $filename);
+
+        $product = Products::find($id);
+        $product->name = $request->input("name");
+        $product->description = $request->input("description");
+        $product->amount = $request->input("amount");
+        $product->image = $filename;
+        $product->price = $request->input("price");
+        $product->save();
 
         return redirect()->route("products.index")->with("success", "Product is aangepast.");
     }
@@ -79,6 +110,74 @@ class ProductsController extends Controller
         $products = Products::latest()->paginate(18);
 
         return view("user.artikelen", compact("products"));
+    }
+
+    public function singleItem($id)
+    {
+        $product = Products::where("id", $id)->get();
+        $productImages = ProductImages::where("productId", $id)->get();
+        $reviews = DB::table("reviews")
+            ->where("reviews.productId", $id)
+            ->join("users", "users.id", "=", "reviews.userId")
+            ->select("reviews.*", "users.name", "users.prefix", "users.lastname")
+            ->orderBy("reviews.created_at", "DESC")
+            ->get();
+
+        $scoreArray = [];
+
+        $averageScore = 0;
+
+        if(count($reviews) > 0)
+        {
+            foreach($reviews as $review)
+            {
+                $scoreArray[] = $review->score;
+            }
+
+            $averageScore = array_sum($scoreArray) / count($scoreArray);
+        }
+
+        return view("user.single-artikel", compact("product", "reviews", "averageScore", "productImages"));
+    }
+
+    public function singleItemReview(Request $request, $id)
+    {
+        $review = new Reviews;
+
+        $review->review = $request->review;
+        $review->userId = Session::get("user")->id;
+        $review->productId = $request->productId;
+        $review->score = $request->score;
+
+        $review->save();
+
+        return redirect()->route("singleItem", $id)->with("success", "Review geplaatst.");
+    }
+
+    public function multipleImagesSingleItem(Request $request, $id)
+    {
+        $image = new ProductImages;
+
+        $file = $request->file("singleItemImages");
+        $extension = $request->file("singleItemImages")->getClientOriginalExtension();
+        $filename = time(). ".".$extension;
+        $file->move("images/products/", $filename);
+
+        $image->productId = $id;
+        $image->image = $filename;
+
+        $image->save();
+
+        return redirect()->route("products.edit", $id)->with("success", "Afbeelding toegevoegd.");
+    }
+
+    public function deleteProductImage(Request $request, $id)
+    {
+        $image = ProductImages::find($id);
+
+        $image->delete();
+
+        return redirect()->route("products.edit", $request->id)->with("success", "Afbeelding verwijderd");
     }
 
     public function home()
