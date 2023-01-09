@@ -18,12 +18,20 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-sm-6 col-10 d-flex flex-column gap-2">
+            <div class="col-md-6 col-10 d-flex flex-column gap-2">
                 <h3 class="text-primary">&euro;{{$product[0]->price}}</h3>
                 <p>{{$product[0]->description}}</p>
-                <a href="" class="btn btn-primary mb-2">
-                    In winkelwagen <i class="fa-solid fa-cart-shopping"></i>
-                </a>
+                <form method="post">
+                    @csrf
+                    @method("POST")
+                    <div class="form-group">
+                        <label for="">Hoeveelheid</label>
+                        <input type="number" class="form-control" value="1" name="amount">
+                    </div>
+                    <button type="submit" href="" class="btn btn-primary mb-2 w-100">
+                        In winkelwagen <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </form>
                 <div>
                     <p><span class="text-success"><i class="fa-solid fa-check"></i></span> Gegarandeerd geld terug als u niet tevreden bent.</p>
                     <p><span class="text-success"><i class="fa-solid fa-check"></i></span> Ophalen bij een bezorgpunt mogelijk.</p>

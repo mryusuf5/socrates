@@ -47,7 +47,15 @@
     width: 75px;
 }
 
-@media only screen and (max-width: 992px){
+.itemCartImage{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 250px;
+    width: 250px;
+}
+
+@media only screen and (max-width: 1199px){
   .text-image{
     width: 100%;
   }
@@ -58,6 +66,10 @@
   .singleProductImageSmall{
       height: 50px;
       width: 50px;
+  }
+  .itemCartImage{
+      height: 100px;
+      width: 100px;
   }
 }
 

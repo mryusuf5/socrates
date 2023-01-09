@@ -25,7 +25,10 @@
                         <a class="nav-link {{Route::is("home") ? "active" : ""}}" href="{{route("home")}}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{Route::is("artikelen") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
+                        <a class="nav-link {{Route::is("artikelen") || Route::is("singleItem") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route("shoppingCartView")}}" class="nav-link {{Route::is("shoppingCartView") ? "active" : ""}}">Mijn winkelwagen</a>
                     </li>
                 </ul>
                 @if(!Session::get("user"))
@@ -42,11 +45,6 @@
                             <a class="dropdown-item" href="{{route("admin.dashboard")}}">Dashboard</a>
                         </li>
                         @endif
-                        <li>
-                            <a href="" class="dropdown-item">
-                                Mijn winkelwagen
-                            </a>
-                        </li>
                         <li class="">
                             <a class="dropdown-item" href="{{route("logout")}}">Uitloggen</a>
                         </li>

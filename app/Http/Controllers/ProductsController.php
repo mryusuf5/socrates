@@ -140,6 +140,23 @@ class ProductsController extends Controller
         return view("user.single-artikel", compact("product", "reviews", "averageScore", "productImages"));
     }
 
+    public function addToCart($id, Request $request)
+    {
+        $item = Products::where("id", $id)->first();
+
+        $amount = $request->amount;
+
+        Session::push("itemCart", [
+            "amount" => $amount,
+            "item" => $item
+        ]);
+
+
+//        Session::flush();
+
+        return redirect()->route("shoppingCartView")->with("success", "Product is toegevoegd aan je winkelwagen.");
+    }
+
     public function singleItemReview(Request $request, $id)
     {
         $review = new Reviews;
@@ -185,5 +202,41 @@ class ProductsController extends Controller
         $products = ["products" => Products::orderBy("id", "desc")->limit(4)];
 
         return view("user.welcome", $products);
+    }
+
+    public function shoppingCartView()
+    {
+        $totalPrice = 0;
+
+        foreach(Session::get("itemCart") as $item)
+        {
+            $itemTotal = $item["item"]->price * $item["amount"];
+
+            $totalPrice += $itemTotal;
+        }
+
+        return view("user.shopping-cart", compact("totalPrice"));
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        $items = Session::get("itemCart");
+
+        Session::pull("itemCart");
+
+        foreach($items as $index => $item)
+        {
+            if($index != $request->index)
+            {
+                Session::push("itemCart", $item);
+            }
+        }
+
+        return redirect()->route("shoppingCartView");
+    }
+
+    public function payView()
+    {
+        return view("user.afrekenen");
     }
 }
