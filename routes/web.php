@@ -23,7 +23,11 @@ Route::post("/register", [UserController::class, "register"]);
 Route::get("logout", [UserController::class, "logout"])->name("logout");
 Route::get("/artikelen", [ProductsController::class, "allItems"])->name("artikelen");
 Route::get("/artikelen/{artikelId}", [ProductsController::class, "singleItem"])->name("singleItem");
+Route::post("/artikelen/{artikelId}", [ProductsController::class, "addToCart"]);
 Route::post("/artikelen/{artikelId}/review", [ProductsController::class, "singleItemReview"])->name("singleItemReview");
+Route::get("/winkelwagen", [ProductsController::class, "shoppingCartView"])->name("shoppingCartView");
+Route::post("/winkelwagen", [ProductsController::class, "removeFromCart"]);
+Route::get("afrekenen", [ProductsController::class, "payView"])->name("payView");
 
 Route::get("/algemene-voorwaarden", function(){
     return view("user.algemene-voorwaarden");

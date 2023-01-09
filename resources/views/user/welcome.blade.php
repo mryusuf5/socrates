@@ -6,31 +6,31 @@
             <p class="fs-4 col-md-4 col-10"><span class="fs-2 quote">“</span>The secret of change is to focus all of your energy not on figting the old, but on building the new.<span class="fs-2 quote">”</span>&nbsp;<br><span class="quote">-Socrates</span></p>
         </div>
 
-        <div class="container d-flex gap-2 flex-column">
-            <h2 class="text-md-start text-center">Veel verkochte producten</h2>
-            <div class="row d-flex align-items-center justify-content-center">
-            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">
-                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}">
-                <h4>MushRocks</h4>
-                <h5>&euro; 19,95 EUR</h5>
-            </div>
-            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">
-                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}" alt="">
-                <h4>MushRocks</h4>
-                <h5>&euro; 19,95 EUR</h5>
-            </div>
-            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">
-                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}" alt="">
-                <h4>MushRocks</h4>
-                <h5>&euro; 19,95 EUR</h5>
-            </div>
-            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">
-                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}" alt="">
-                <h4>MushRocks</h4>
-                <h5>&euro; 19,95 EUR</h5>
-            </div>
-            </div>
-        </div>
+{{--        <div class="container d-flex gap-2 flex-column">--}}
+{{--            <h2 class="text-md-start text-center">Veel verkochte producten</h2>--}}
+{{--            <div class="row d-flex align-items-center justify-content-center">--}}
+{{--            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">--}}
+{{--                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}">--}}
+{{--                <h4>MushRocks</h4>--}}
+{{--                <h5>&euro; 19,95 EUR</h5>--}}
+{{--            </div>--}}
+{{--            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">--}}
+{{--                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}" alt="">--}}
+{{--                <h4>MushRocks</h4>--}}
+{{--                <h5>&euro; 19,95 EUR</h5>--}}
+{{--            </div>--}}
+{{--            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">--}}
+{{--                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}" alt="">--}}
+{{--                <h4>MushRocks</h4>--}}
+{{--                <h5>&euro; 19,95 EUR</h5>--}}
+{{--            </div>--}}
+{{--            <div class="d-flex flex-column gap-1 text-center align-items-center col-lg-3 col-sm-6 col-10">--}}
+{{--                <img style="width: 200px" src="{{asset("images/products/mushrocks.jpg")}}" alt="">--}}
+{{--                <h4>MushRocks</h4>--}}
+{{--                <h5>&euro; 19,95 EUR</h5>--}}
+{{--            </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
         <br>
         <br>
         <br>
