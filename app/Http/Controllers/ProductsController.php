@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\factuur;
+use App\Mail\order;
+use App\Models\bestellingen;
+use App\Models\bestellingenProducten;
+use App\Models\invoices;
 use App\Models\ProductImages;
 use App\Models\Products;
 use App\Models\Reviews;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class ProductsController extends Controller
@@ -46,7 +53,7 @@ class ProductsController extends Controller
         $product->price = $request->input("price");
         $product->save();
 
-        return redirect()->route("products.index")->with("success", "Product is aangemaakt.");
+        return redirect()->route("admin.products.index")->with("success", "Product is aangemaakt.");
     }
 
     public function show(Products $products)
@@ -79,7 +86,7 @@ class ProductsController extends Controller
             $product->price = $request->input("price");
             $product->save();
 
-            return redirect()->route("products.index")->with("success", "Product is aangepast.");
+            return redirect()->route("admin.products.index")->with("success", "Product is aangepast.");
         }
 
         $file = $request->file("image");
@@ -95,14 +102,14 @@ class ProductsController extends Controller
         $product->price = $request->input("price");
         $product->save();
 
-        return redirect()->route("products.index")->with("success", "Product is aangepast.");
+        return redirect()->route("admin.products.index")->with("success", "Product is aangepast.");
     }
 
     public function destroy(Products $product)
     {
         $product->delete();
 
-        return redirect()->route("products.index")->with("success", "Product is verwijderd.");
+        return redirect()->route("admin.products.index")->with("success", "Product is verwijderd.");
     }
 
     public function allItems()
@@ -185,7 +192,7 @@ class ProductsController extends Controller
 
         $image->save();
 
-        return redirect()->route("products.edit", $id)->with("success", "Afbeelding toegevoegd.");
+        return redirect()->route("admin.products.edit", $id)->with("success", "Afbeelding toegevoegd.");
     }
 
     public function deleteProductImage(Request $request, $id)
@@ -194,7 +201,7 @@ class ProductsController extends Controller
 
         $image->delete();
 
-        return redirect()->route("products.edit", $request->id)->with("success", "Afbeelding verwijderd");
+        return redirect()->route("admin.products.edit", $request->id)->with("success", "Afbeelding verwijderd");
     }
 
     public function home()
@@ -207,13 +214,16 @@ class ProductsController extends Controller
     public function shoppingCartView()
     {
         $totalPrice = 0;
-
-        foreach(Session::get("itemCart") as $item)
+        if(Session::get("itemCart"))
         {
-            $itemTotal = $item["item"]->price * $item["amount"];
+            foreach(Session::get("itemCart") as $item)
+            {
+                $itemTotal = $item["item"]->price * $item["amount"];
 
-            $totalPrice += $itemTotal;
+                $totalPrice += $itemTotal;
+            }
         }
+
 
         return view("user.shopping-cart", compact("totalPrice"));
     }
@@ -237,6 +247,130 @@ class ProductsController extends Controller
 
     public function payView()
     {
-        return view("user.afrekenen");
+        $itemsPrices = 0;
+        Session::pull("totalPrice");
+        foreach(Session::get("itemCart") as $cart)
+        {
+            $itemsPrices += $cart["item"]["price"];
+        }
+        $itemsPrices += 4.15;
+        Session::push("totalPrice", number_format($itemsPrices, 2));
+        return view("user.afrekenen-details");
+    }
+
+    public function payCredentialsView()
+    {
+        return view("user.afrekenen-details");
+    }
+
+    public function checkout(Request $request)
+    {
+        $request->validate([
+            "firstname" => "required",
+            "lastname" => "required",
+            "email" => "required|same:confirmEmail",
+            "confirmEmail" => "required",
+            "phone" => "required",
+            "adress" => "required",
+            "housenumber" => "required",
+            "postalcode" => "required",
+            "residence" => "required",
+            "over18" => "required"
+        ]);
+
+        Session::pull("payementInfo");
+        Session::push("payementInfo", $request->all());
+
+        \Stripe\Stripe::setApiKey(config("stripe.sk"));
+
+        $price = number_format(Session::get("totalPrice")[0], 2, ".");
+
+        $session = \Stripe\Checkout\Session::create([
+            "line_items" => [
+                [
+                    "price_data" => [
+                        "currency" => "eur",
+                        "product_data" => [
+                            "name" => "Bestelling Socrates microdosing"
+                        ],
+                        "unit_amount" => str_replace(".", "", $price)
+                    ],
+                    "quantity" => 1
+                ]
+            ],
+            "mode" => "payment",
+            "success_url" => route("success"),
+            "cancel_url" => route("home")
+        ]);
+
+        return redirect()->away($session->url);
+    }
+
+    public function success()
+    {
+        $pdfName = time();
+        $totalPrice = 0;
+
+        $bestelling = new bestellingen();
+        $bestelling->firstname = Session::get("payementInfo")[0]["firstname"];
+        $bestelling->prefix = Session::get("payementInfo")[0]["prefix"];
+        $bestelling->lastname = Session::get("payementInfo")[0]["lastname"];
+        $bestelling->email = Session::get("payementInfo")[0]["email"];
+        $bestelling->phonenumber = Session::get("payementInfo")[0]["phone"];
+        $bestelling->adress = Session::get("payementInfo")[0]["adress"];
+        $bestelling->housenumber = Session::get("payementInfo")[0]["housenumber"];
+        $bestelling->postalcode = Session::get("payementInfo")[0]["postalcode"];
+        $bestelling->residence = Session::get("payementInfo")[0]["residence"];
+
+        $bestelling->save();
+
+        $order = bestellingen::orderBy("id", "DESC")->where("adress", Session::get("payementInfo")[0]["adress"])->firstOrFail();
+
+        foreach(Session::get("itemCart") as $cart)
+        {
+            $bestellingOrder = new bestellingenProducten();
+            $bestellingOrder->orderId = $order->id;
+            $bestellingOrder->productId = $cart["item"]["id"];
+            $bestellingOrder->amount = $cart["amount"];
+            $bestellingOrder->save();
+        }
+
+        $orders = DB::table("bestellingen_productens")
+            ->join("products", "bestellingen_productens.productId" , "=" , "products.id")
+            ->select("bestellingen_productens.*", "products.name", "products.description", "products.price")
+            ->where("bestellingen_productens.orderId", $order->id)
+            ->get();
+
+        foreach($orders as $order)
+        {
+            $currentPrice = $order->amount * $order->price;
+            $totalPrice += $currentPrice;
+        }
+
+        $data = [
+            "products" => $orders,
+            "totalPrice" => $totalPrice,
+            "user" => Session::get("payementInfo")[0],
+            "invoiceCode" => $pdfName
+        ];
+
+        $pdf = PDF::loadView("pdf.pdf_view", $data);
+        $pdf->setPaper("A4", "portrait");
+
+        $pdf->save("invoices/" . $pdfName .".pdf");
+
+        $invoice = new invoices();
+
+        $invoice->fileName = $pdfName . ".pdf";
+        $invoice->order_id = $order->id;
+
+        $invoice->save();
+
+        Mail::to(Session::get("payementInfo")[0]["email"])->send(new factuur($pdfName));
+        Mail::to("so-cratesmd@hotmail.com")->send(new order($data));
+
+        Session::pull("itemCart");
+
+        return view("user.succes");
     }
 }

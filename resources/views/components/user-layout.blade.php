@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link {{Route::is("home") ? "active" : ""}}" href="{{route("home")}}">Home</a>
+                        <a class="nav-link {{Route::is("home") || Route::is("") ? "active" : ""}}" href="{{route("home")}}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{Route::is("artikelen") || Route::is("singleItem") ? "active" : ""}}" href="{{route("artikelen")}}">Artikelen</a>
