@@ -11,7 +11,7 @@
             </div>
         @endif
 
-        <form action="{{route("products.store")}}" method="post" class="row gap-2" enctype="multipart/form-data">
+        <form action="{{route("admin.products.store")}}" method="post" class="row gap-2" enctype="multipart/form-data">
             @csrf
             <div class="form-group col-5">
                 <label>Naam:</label>

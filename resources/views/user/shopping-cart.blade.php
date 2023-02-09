@@ -1,10 +1,9 @@
 <x-user-layout>
-{{--    {{dd(Session::get("itemCart"))}}--}}
     <div class="container">
         <br>
-        @if(count(Session::get("itemCart")) != 0)
+        @if(Session::get("itemCart"))
         <div class="d-flex flex-md-row flex-column gap-2">
-            <div class="border border-primary p-3 d-flex flex-column gap-2">
+            <div class="border border-primary p-3 d-flex flex-column gap-2 rounded">
                 @foreach(Session::get("itemCart") as $index => $item)
                     <div class="d-flex gap-2">
                         <a class="" href="{{route("singleItem", 1)}}">
@@ -13,7 +12,7 @@
                         <div class="d-flex flex-column justify-content-between w-100">
                             <div>
                                 <h4>{{$item["item"]->name}}</h4>
-                                <p>{{Str::limit($item["item"]->description, 100)}}</p>
+                                <p>{{Str::limit($item["item"]->description, 25)}}</p>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -36,11 +35,30 @@
                     <hr>
                 @endforeach
             </div>
-            <div class="border border-primary p-3 justify-content-between d-flex flex-column">
+            <div class="border border-primary p-3 justify-content-between d-flex flex-column rounded">
                 <h4>Overzicht</h4>
                 <div>
-                    <p>Totaal: &euro;{{$totalPrice}} </p>
-                    <a href="{{route("payView")}}" class="btn btn-info">Afrekenen met IDEAL</a>
+                    <p>Producten: &euro;{{$totalPrice}}</p>
+                    <p>Verzendkosten: &euro;4,15</p>
+                    <p>Totaal: &euro;{{$totalPrice + 4.15}} </p>
+                    <a href="{{route("payViewGet")}}" class="btn btn-primary">Afrekenen</a>
+{{--                    @if(Session::get("user"))--}}
+{{--                        <form action="{{route("payCredentialsView")}}" method="post">--}}
+{{--                            @csrf--}}
+{{--                            @method("POST")--}}
+{{--                            <input type="text" hidden value="{{$totalPrice + 4.15}}">--}}
+{{--                            <button class="btn btn-info" type="submit">Afrekenen</button>--}}
+{{--                        </form>--}}
+{{--                        <a href="{{route("payCredentialsView")}}" class="btn btn-info">Afrekenen</a>--}}
+{{--                    @else--}}
+{{--                        <form action="{{route("payView")}}" method="post">--}}
+{{--                            @csrf--}}
+{{--                            @method("POST")--}}
+{{--                            <input type="text" name="price" hidden value="{{$totalPrice + 4.15}}">--}}
+{{--                            <button class="btn btn-info" type="submit">Afrekenen</button>--}}
+{{--                        </form>--}}
+{{--                    @endif--}}
+
                 </div>
             </div>
             @else

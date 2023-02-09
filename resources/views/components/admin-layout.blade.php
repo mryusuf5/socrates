@@ -19,20 +19,25 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <br>
-                    <a class="nav-link {{Request::is("products") ? "active" : ""}}" href="{{route("products.index")}}">
+                    <a class="nav-link {{Request::is("admin/products") ? "active" : ""}}" href="{{route("admin.products.index")}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-line"></i></div>
                         Dashboard
                     </a>
                     <hr>
-                    <a class="nav-link {{Request::is("products/create") ? "active" : ""}}" href="{{route("products.create")}}" >
+                    <a class="nav-link {{Request::is("admin/products/create") ? "active" : ""}}" href="{{route("admin.products.create")}}" >
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
                         Producten toev...
                     </a>
                     <hr>
-                    <a class="nav-link" href="/admin/bestellingen" >
+                    <a class="nav-link {{Request::is("admin/orders") ? "active" : ""}}" href="{{route("admin.orders")}}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-folder-open"></i></div>
                         Bestellingen
                     </a>
+{{--                    <hr>--}}
+{{--                    <a class="nav-link {{Request::is("admin/archive") ? "active" : ""}}" href="{{route("admin.archive")}}">--}}
+{{--                        <div class="sb-nav-link-icon"><i class="fa-solid fa-box-archive"></i></div>--}}
+{{--                        Archief--}}
+{{--                    </a>--}}
                 </div>
             </div>
             <div class="sb-sidenav-footer">

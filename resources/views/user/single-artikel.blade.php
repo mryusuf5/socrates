@@ -32,11 +32,6 @@
                         In winkelwagen <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </form>
-                <div>
-                    <p><span class="text-success"><i class="fa-solid fa-check"></i></span> Gegarandeerd geld terug als u niet tevreden bent.</p>
-                    <p><span class="text-success"><i class="fa-solid fa-check"></i></span> Ophalen bij een bezorgpunt mogelijk.</p>
-                    <p><span class="text-success"><i class="fa-solid fa-check"></i></span> Inclusief bezorgkosten.</p>
-                </div>
             </div>
             <div class="col-10 mt-4">
                 <div class="d-flex justify-content-between flex-md-row flex-column mb-md-0 mb-2">

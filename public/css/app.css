@@ -72,6 +72,16 @@
       width: 100px;
   }
 }
+.successIcon{
+    font-size: 16rem
+}
+
+
+@media only screen and (max-width: 600px){
+    .successIcon{
+        font-size: 8rem;
+    }
+}
 
 .rating {
     float:left;

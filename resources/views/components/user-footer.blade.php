@@ -20,7 +20,7 @@
       <div class="col-lg-4 col-sm-6 col-8 d-flex flex-column gap-2">
         <h5 class="quote">Social media</h5>
         <a href="https://www.instagram.com/socrates_microdose/" target="_blank" class="text-white">Volg ons op Instagram <i class="fa-brands fa-instagram text-danger"></i></a>
-        <a href="https://www.instagram.com/socrates_microdose/" target="_blank" class="text-white">Volg ons op Facebook <i class="fa-brands fa-facebook text-info"></i></a>
+        <a href="https://www.facebook.com/barbariousmma" target="_blank" class="text-white">Volg ons op Facebook <i class="fa-brands fa-facebook text-info"></i></a>
       </div>
     </div>
   </div>

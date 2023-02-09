@@ -15,7 +15,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{route("products.update", $product->id)}}" method="POST" class="row gap-2" enctype="multipart/form-data">
+        <form action="{{route("admin.products.update", $product->id)}}" method="POST" class="row gap-2" enctype="multipart/form-data">
             @csrf
             @method("PUT")
             <div class="form-group col-5">
@@ -47,10 +47,10 @@
             </div>
         </form>
             <br>
-        <form action="{{route("products.destroy", $product->id)}}" method="post">
+        <form action="{{route("admin.products.destroy", $product->id)}}" method="post">
             @csrf
             @method("DELETE")
-            <input type="submit" value="Verwijderen" class="btn btn-danger">
+            <input type="submit" value="Product verwijderen" class="btn btn-danger">
         </form>
         <hr>
         <div class="mt-4">
@@ -59,7 +59,7 @@
                 @foreach($productImages as $productImage)
                     <div class="d-flex flex-column gap-2">
                         <img style="width: 250px;" src="{{asset("images/products") . "/" . $productImage->image}}" alt="">
-                        <form action="{{route("deleteProductImage", $productImage->id)}}" method="post">
+                        <form action="{{route("admin.deleteProductImage", $productImage->id)}}" method="post">
                             @csrf
                             @method("POST")
                             <input type="text" value="{{$product->id}}" hidden name="id">
@@ -69,7 +69,7 @@
                 @endforeach
             </div>
 
-            <form action="{{route("multipleImages", $product->id)}}" method="post" class="my-3" enctype="multipart/form-data">
+            <form action="{{route("admin.multipleImages", $product->id)}}" method="post" class="my-3" enctype="multipart/form-data">
                 @csrf
                 @method("POST")
                 <div class="form-group">
