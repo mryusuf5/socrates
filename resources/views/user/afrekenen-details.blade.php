@@ -59,7 +59,7 @@
                 </div>
                 <div class="form-group col-md-5 col-10">
                     <input type="checkbox" class="form-check-input" name="over18">
-                    <label class="form-check-label" for="">Ik ben 18+ en ik ga akkoord met de <a href="{{route("algemene-voorwaarden")}}">Algemene voorwaarden.</a></label>
+                    <label class="form-check-label" for="">Ik ben 18+, ik ga akkoord met de <a href="{{route("disclaimer")}}">Disclaimer</a> en de <a href="{{route("algemene-voorwaarden")}}">Algemene voorwaarden.</a></label>
                     <p class="text-danger">@error("over18"){{$message}}@enderror</p>
                 </div>
                 <div class="form-group col-10">

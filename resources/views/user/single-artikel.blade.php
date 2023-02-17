@@ -19,11 +19,18 @@
                 </div>
             </div>
             <div class="col-md-6 col-10 d-flex flex-column gap-2">
-                <h3 class="text-primary">&euro;{{$product[0]->price}}</h3>
-                <p>{{$product[0]->description}}</p>
+                <h3 class="text-primary" id="productPrice"></h3>
+                <p>{!! $product[0]->description !!}</p>
                 <form method="post">
                     @csrf
                     @method("POST")
+                    <div class="d-flex flex-column gap-2 col-10">
+                        @foreach($productOptions as $productOption)
+                            <input type="radio" class="btn-check" value="{{$productOption->id}}" data-price="{{number_format($productOption->price, 2)}}" name="productOption" id="{{$productOption->name}}" autocomplete="off" checked="">
+                            <label class="btn btn-outline-primary" for="{{$productOption->name}}">{{$productOption->name}}</label>
+                        @endforeach
+                    </div>
+                    <br>
                     <div class="form-group">
                         <label for="">Hoeveelheid</label>
                         <input type="number" class="form-control" value="1" name="amount">
@@ -145,4 +152,16 @@
             </div>
         </div>
     </div>
+    <script>
+        const productPrice = document.querySelector("#productPrice");
+        productPrice.textContent = "€ " + document.querySelector("input[type='radio'][name=productOption]:checked").dataset.price;
+
+        const changePrice = () => {
+            productPrice.textContent = "€ " + document.querySelector("input[type='radio'][name=productOption]:checked").dataset.price;
+        }
+
+        document.querySelectorAll("input[name='productOption']").forEach((input) => {
+            input.addEventListener('change', changePrice);
+        })
+    </script>
 </x-user-layout>

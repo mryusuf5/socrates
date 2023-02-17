@@ -14,8 +14,7 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get("/", [UserController::class, "test"])->name("test");
-Route::post("/", [UserController::class, "testPost"]);
+Route::get("/", [ProductsController::class, "home"]);
 Route::get("/home", [ProductsController::class, "home"])->name("home");
 Route::get("/login", [UserController::class, "loginView"])->name("loginView");
 Route::get("/register", [UserController::class, "registerView"])->name("registerView");
@@ -33,6 +32,8 @@ Route::post("afrekenen", [ProductsController::class, "payView"])->name("payView"
 Route::get("/afrekenen-details", [ProductsController::class, "payCredentialsView"])->name("payCredentialsView");
 Route::post("/afrekenen-details", [ProductsController::class, "checkout"])->name("checkout");
 Route::get("/betaling-succes", [ProductsController::class, "success"])->name("success");
+Route::get("/wachtwoord-wijzigen", [UserController::class, "changePassword"])->name("changePassword");
+Route::post("/wachtwoord-wijzigen", [UserController::class, "changePasswordPost"]);
 
 Route::get("/algemene-voorwaarden", function(){
     return view("user.algemene-voorwaarden");
@@ -69,4 +70,6 @@ Route::prefix("/admin")->name("admin.")->middleware("admin")->group(function(){
     Route::get("orders", [UserController::class, "orders"])->name("orders");
     Route::get("archive", [UserController::class, "archive"])->name("archive");
     Route::get("archive/{productId}", [UserController::class, "archiveProduct"])->name("archiveProduct");
+    Route::post("products/{productId}/edit/options", [ProductsController::class, "createOptions"])->name("createOptions");
+    Route::post("products/{productId}/edit/options/delete", [ProductsController::class, "deleteOption"])->name("deleteOption");
 });

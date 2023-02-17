@@ -12,12 +12,13 @@
                         <div class="d-flex flex-column justify-content-between w-100">
                             <div>
                                 <h4>{{$item["item"]->name}}</h4>
-                                <p>{{Str::limit($item["item"]->description, 25)}}</p>
+                                <h5>{{$item["productOption"][0]->name}}</h5>
+                                <p>{!! Str::limit($item["item"]->description, 25) !!}</p>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h4>Aantal: {{$item["amount"]}}</h4>
-                                    <h4>Prijs per stuk: &euro;{{$item["item"]->price}}</h4>
+                                    <h4>Prijs per stuk: &euro;{{$item["productOption"][0]->price}}</h4>
                                 </div>
                                 <h1>
                                     <form method="post">
@@ -38,7 +39,7 @@
             <div class="border border-primary p-3 justify-content-between d-flex flex-column rounded">
                 <h4>Overzicht</h4>
                 <div>
-                    <p>Producten: &euro;{{$totalPrice}}</p>
+                    <p>Producten: &euro;{{number_format($totalPrice, 2)}}</p>
                     <p>Verzendkosten: &euro;4,15</p>
                     <p>Totaal: &euro;{{$totalPrice + 4.15}} </p>
                     <a href="{{route("payViewGet")}}" class="btn btn-primary">Afrekenen</a>

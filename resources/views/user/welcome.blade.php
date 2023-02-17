@@ -23,17 +23,28 @@
             </div>
             </div>
         </div>
-
+        <div class="container d-flex justify-content-md-between justify-content-center flex-md-row flex-column">
+            <div class="homeImageContainer d-flex justify-content-center">
+                <img src="{{asset('images/gebruiksaanwijzing.png')}}" alt="">
+            </div>
+            <br>
+            <div class="homeImageContainer d-flex justify-content-center">
+                <div class="d-flex flex-column">
+                    <h2>My mission:</h2>
+                    <img src="{{asset('images/gebruiksaanwijzing2.png')}}" alt="">
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="d-flex gap-4 flex-lg-row flex-column align-items-center">
-            <div class="d-flex flex-column p-2">
-                <h2>Wat is Microdosing</h2>
-                <p>Een microdosis is een sub-perceptuele (onopvallende) dosis Magic Truffles, die veel mensen in hun wekelijkse routines opnemen.</p>
-                <p>Het idee hierachter is om het niveau van creativiteit, energie en focus te verhogen en het niveau van stress, angst en emotionele instabiliteit te verminderen.</p>
-                <p>Socrates Microdosing verhoogt namelijk de neurale connectiviteit, omdat nieuwe verbindingen tussen verschillende hersengebieden worden gestimuleerd en dat ondersteunt het overwinnen van angsten en depressies en bevordert het probleemoplossend vermogen.</p>
-                <a class="btn btn-primary">Meer lezen over Microdosing</a>
-            </div>
-            <img class="w-50" src="{{asset("images/magic-mushrooms.jfif")}}" alt="">
+                <div class="d-flex flex-column p-2">
+                    <h2>Wat is Microdosing</h2>
+                    <p>Een microdosis is een sub-perceptuele (onopvallende) dosis Magic Truffles, die veel mensen in hun wekelijkse routines opnemen.</p>
+                    <p>Het idee hierachter is om het niveau van creativiteit, energie en focus te verhogen en het niveau van stress, angst en emotionele instabiliteit te verminderen.</p>
+                    <p>Socrates Microdosing verhoogt namelijk de neurale connectiviteit, omdat nieuwe verbindingen tussen verschillende hersengebieden worden gestimuleerd en dat ondersteunt het overwinnen van angsten en depressies en bevordert het probleemoplossend vermogen.</p>
+                    <a href="https://en.m.wikipedia.org/wiki/Psychedelic_microdosing" target="_blank" class="btn btn-primary">Meer lezen over Microdosing</a>
+                </div>
+                <img class="w-50" src="{{asset("images/magic-mushrooms.jfif")}}" alt="">
             </div>
         </div>
     </div>

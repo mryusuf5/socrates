@@ -10,6 +10,8 @@
     <link href="{{asset("css/bootstrap.css")}}" rel="stylesheet">
     <link href="{{asset("css/app.css")}}" rel="stylesheet">
     <link rel="stylesheet" href="{{URL::asset("css/styles.css")}}">
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e0462e4fee.js" crossorigin="anonymous"></script>
 </head>
 <body>

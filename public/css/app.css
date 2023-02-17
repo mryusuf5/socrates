@@ -71,6 +71,9 @@
       height: 100px;
       width: 100px;
   }
+  .homeImageContainer img{
+      width: 300px;
+  }
 }
 .successIcon{
     font-size: 16rem
