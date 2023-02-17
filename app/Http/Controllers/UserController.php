@@ -33,7 +33,7 @@ class UserController extends Controller
             "name" => "required",
             "lastname" => "required",
             "email" => "required|email|unique:users",
-            "password" => "required",
+            "password" => "required|same:passwordConfirm"
         ]);
 
         $user = new User;
@@ -92,9 +92,10 @@ class UserController extends Controller
         ->where("archived", 0)
         ->join("products", "products.id", "=", "bestellingen_productens.productId")
         ->join("bestellingens", "bestellingens.id", "=", "bestellingen_productens.orderId")
-        ->select("bestellingen_productens.amount", "bestellingen_productens.id", "products.name", "bestellingens.firstname", "bestellingens.lastname", "bestellingens.prefix", "bestellingens.phonenumber", "bestellingens.email", "bestellingens.adress", "bestellingens.housenumber", "bestellingens.postalcode", "bestellingens.residence", "bestellingens.created_at")
+        ->select("bestellingen_productens.amount", "bestellingen_productens.choiceName", "bestellingen_productens.id", "products.name", "bestellingens.firstname", "bestellingens.lastname", "bestellingens.prefix", "bestellingens.phonenumber", "bestellingens.email", "bestellingens.adress", "bestellingens.housenumber", "bestellingens.postalcode", "bestellingens.residence", "bestellingens.created_at")
         ->orderBy("created_at", "DESC")
         ->get();
+
         return view("admin.orders", compact("orders"));
     }
 
@@ -147,5 +148,25 @@ class UserController extends Controller
             return view("user.welcome");
         else
             return view("user.test");
+    }
+
+    public function changePassword()
+    {
+        return view("user.wachtwoord-wijzigen");
+    }
+
+    public function changePasswordPost(Request $request)
+    {
+        $request->validate([
+            "password" => "required",
+            "passwordConfirm" => "required|same:password"
+        ]);
+
+        $user = User::where("id", Session::get("user")->id)->first();
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        return redirect()->route("changePassword")->with("success", "Wachtwoord aangepast");
     }
 }

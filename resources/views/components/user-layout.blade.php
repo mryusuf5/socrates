@@ -46,6 +46,9 @@
                         </li>
                         @endif
                         <li class="">
+                            <a class="dropdown-item" href="{{route("changePassword")}}">Wachtwoord wijzigen</a>
+                        </li>
+                        <li class="">
                             <a class="dropdown-item" href="{{route("logout")}}">Uitloggen</a>
                         </li>
                     </ul>

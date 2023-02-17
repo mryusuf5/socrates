@@ -78,6 +78,7 @@
                     <tr>
                         <th scope="col">Aantal</th>
                         <th scope="col">Artikel</th>
+                        <th scope="col">Artikel optie</th>
                         <th scope="col">Omschrijving</th>
                         <th scope="col">Prijs</th>
                         <th scope="col">Totaal</th>
@@ -88,9 +89,10 @@
                     <tr>
                         <td>{{$order->amount}}</td>
                         <td>{{$order->name}}</td>
-                        <td>{{$order->description}}</td>
-                        <td style="text-align: end">&euro;{{$order->price}}</td>
-                        <td style="text-align: end">&euro;{{$order->amount * $order->price}}</td>
+                        <td>{{$order->choiceName}}</td>
+                        <td>{!! $order->description !!}</td>
+                        <td style="text-align: end">&euro;{{$order->choicePrice}}</td>
+                        <td style="text-align: end">&euro;{{$order->amount * $order->choicePrice}}</td>
                     </tr>
                 @endforeach
                 </tbody>

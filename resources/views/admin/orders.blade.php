@@ -16,7 +16,7 @@
                    <p class="card-text">{{$order->phonenumber}}</p>
                    <p class="card-text">{{$order->adress . " " . $order->housenumber}}</p>
                    <p class="card-text">{{$order->postalcode . " " . $order->residence}}</p>
-                   <p class="card-text fw-bold">{{$order->name . " x" . $order->amount}}</p>
+                   <p class="card-text fw-bold">{{$order->name . " " . $order->choiceName . " x" . $order->amount}}</p>
                    <a href="{{route("admin.archiveProduct", $order->id)}}" class="card-link">Archiveren</a>
                </div>
             </div>

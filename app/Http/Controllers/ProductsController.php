@@ -7,6 +7,7 @@ use App\Mail\order;
 use App\Models\bestellingen;
 use App\Models\bestellingenProducten;
 use App\Models\invoices;
+use App\Models\productChoices;
 use App\Models\ProductImages;
 use App\Models\Products;
 use App\Models\Reviews;
@@ -36,8 +37,7 @@ class ProductsController extends Controller
             "name" => "required",
             "description" => "required",
             "image" => "required",
-            "amount" => "required",
-            "price" => "required"
+            "amount" => "required"
         ]);
 
         $file = $request->file("image");
@@ -64,7 +64,8 @@ class ProductsController extends Controller
     public function edit(Products $product)
     {
         $productImages = ProductImages::where("productId", $product->id)->get();
-        return view("admin.edit", compact("product", "productImages"));
+        $productOptions = productChoices::where("productId", $product->id)->get();
+        return view("admin.edit", compact("product", "productImages", "productOptions"));
     }
 
     public function update(Request $request, $id)
@@ -72,8 +73,7 @@ class ProductsController extends Controller
         $request->validate([
             "name" => "required",
             "description" => "required",
-            "amount" => "required",
-            "price" => "required"
+            "amount" => "required"
         ]);
 
         if(!$request->image)
@@ -83,7 +83,18 @@ class ProductsController extends Controller
             $product->description = $request->input("description");
             $product->amount = $request->input("amount");
             $product->image = $request->input("hiddenImage");
-            $product->price = $request->input("price");
+            if($request->input("comingSoon") == "on")
+            {
+                $product->availableCode = 1;
+            }
+            else if($request->input("soldOut") == "on")
+            {
+                $product->availableCode = 2;
+            }
+            else
+            {
+                $product->availableCode = 0;
+            }
             $product->save();
 
             return redirect()->route("admin.products.index")->with("success", "Product is aangepast.");
@@ -122,7 +133,12 @@ class ProductsController extends Controller
     public function singleItem($id)
     {
         $product = Products::where("id", $id)->get();
+        if($product[0]->availableCode == 1)
+        {
+            return redirect()->route("home");
+        }
         $productImages = ProductImages::where("productId", $id)->get();
+        $productOptions = productChoices::where("productId", $id)->get();
         $reviews = DB::table("reviews")
             ->where("reviews.productId", $id)
             ->join("users", "users.id", "=", "reviews.userId")
@@ -144,18 +160,20 @@ class ProductsController extends Controller
             $averageScore = array_sum($scoreArray) / count($scoreArray);
         }
 
-        return view("user.single-artikel", compact("product", "reviews", "averageScore", "productImages"));
+        return view("user.single-artikel", compact("product", "reviews", "averageScore", "productImages", "productOptions"));
     }
 
     public function addToCart($id, Request $request)
     {
+        $productOption = productChoices::where("id", $request->productOption)->get();
         $item = Products::where("id", $id)->first();
 
         $amount = $request->amount;
 
         Session::push("itemCart", [
             "amount" => $amount,
-            "item" => $item
+            "item" => $item,
+            "productOption" => $productOption
         ]);
 
 
@@ -218,7 +236,7 @@ class ProductsController extends Controller
         {
             foreach(Session::get("itemCart") as $item)
             {
-                $itemTotal = $item["item"]->price * $item["amount"];
+                $itemTotal = $item["productOption"][0]->price * $item["amount"];
 
                 $totalPrice += $itemTotal;
             }
@@ -251,7 +269,7 @@ class ProductsController extends Controller
         Session::pull("totalPrice");
         foreach(Session::get("itemCart") as $cart)
         {
-            $itemsPrices += $cart["item"]["price"];
+            $itemsPrices += $cart["productOption"][0]->price * $cart["amount"];
         }
         $itemsPrices += 4.15;
         Session::push("totalPrice", number_format($itemsPrices, 2));
@@ -261,6 +279,26 @@ class ProductsController extends Controller
     public function payCredentialsView()
     {
         return view("user.afrekenen-details");
+    }
+
+    public function createOptions(Request $request, $id)
+    {
+
+        $productOption = new productChoices();
+
+        $productOption->name = $request->choiceName;
+        $productOption->price = $request->choicePrice;
+        $productOption->productId = $id;
+        $productOption->save();
+
+        return redirect()->route("admin.products.edit", $id)->with("success", "Optie toegevoegd.");
+    }
+
+    public function deleteOption(Request $request, $id)
+    {
+        productChoices::destroy($request->optionId);
+
+        return redirect()->route("admin.products.edit", $id)->with("success", "Optie verwijderd.");
     }
 
     public function checkout(Request $request)
@@ -325,25 +363,28 @@ class ProductsController extends Controller
         $bestelling->save();
 
         $order = bestellingen::orderBy("id", "DESC")->where("adress", Session::get("payementInfo")[0]["adress"])->firstOrFail();
-
         foreach(Session::get("itemCart") as $cart)
         {
             $bestellingOrder = new bestellingenProducten();
             $bestellingOrder->orderId = $order->id;
             $bestellingOrder->productId = $cart["item"]["id"];
             $bestellingOrder->amount = $cart["amount"];
+            $bestellingOrder->choiceName = $cart["productOption"][0]->name;
+            $bestellingOrder->choicePrice = $cart["productOption"][0]->price;
             $bestellingOrder->save();
         }
 
+
         $orders = DB::table("bestellingen_productens")
-            ->join("products", "bestellingen_productens.productId" , "=" , "products.id")
-            ->select("bestellingen_productens.*", "products.name", "products.description", "products.price")
+            ->select("bestellingen_productens.*", "bestellingen_productens.productId", "bestellingen_productens.amount as amount", "products.name", "products.description")
+            ->leftJoin("products", "bestellingen_productens.productId" , "=" , "products.id")
             ->where("bestellingen_productens.orderId", $order->id)
             ->get();
 
-        foreach($orders as $order)
+
+        foreach($orders as $orderFirst)
         {
-            $currentPrice = $order->amount * $order->price;
+            $currentPrice = $orderFirst->amount * $orderFirst->choicePrice;
             $totalPrice += $currentPrice;
         }
 
@@ -367,7 +408,7 @@ class ProductsController extends Controller
         $invoice->save();
 
         Mail::to(Session::get("payementInfo")[0]["email"])->send(new factuur($pdfName));
-        Mail::to("so-cratesmd@hotmail.com")->send(new order($data));
+//        Mail::to("so-cratesmd@hotmail.com")->send(new order($data));
 
         Session::pull("itemCart");
 

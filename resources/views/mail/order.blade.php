@@ -8,7 +8,7 @@
 <h2>Bestelde producten</h2>
 <ul>
     @foreach($orderInfo["products"] as $products)
-    <li>{{$products->amount}}x {{$products->name}} &euro;{{$products->amount * $products->price}}</li>
+    <li>{{$products->amount}}x {{$products->name . " " . $products->choiceName}} &euro;{{$products->amount * $products->choicePrice}}</li>
     @endforeach
 </ul>
 <hr>
