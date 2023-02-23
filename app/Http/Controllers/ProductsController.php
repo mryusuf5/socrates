@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Mollie\Laravel\Facades\Mollie;
 
 class ProductsController extends Controller
 {
@@ -319,33 +320,47 @@ class ProductsController extends Controller
         Session::pull("payementInfo");
         Session::push("payementInfo", $request->all());
 
-        \Stripe\Stripe::setApiKey(config("stripe.sk"));
-
+//        \Stripe\Stripe::setApiKey(config("stripe.sk"));
+//
+//        $price = number_format(Session::get("totalPrice")[0], 2, ".");
+//
+//        $session = \Stripe\Checkout\Session::create([
+//            "line_items" => [
+//                [
+//                    "price_data" => [
+//                        "currency" => "eur",
+//                        "product_data" => [
+//                            "name" => "Bestelling Socrates microdosing"
+//                        ],
+//                        "unit_amount" => str_replace(".", "", $price)
+//                    ],
+//                    "quantity" => 1
+//                ]
+//            ],
+//            "mode" => "payment",
+//            "success_url" => route("success"),
+//            "cancel_url" => route("home")
+//        ]);
+//
+//        return redirect()->away($session->url);
         $price = number_format(Session::get("totalPrice")[0], 2, ".");
-
-        $session = \Stripe\Checkout\Session::create([
-            "line_items" => [
-                [
-                    "price_data" => [
-                        "currency" => "eur",
-                        "product_data" => [
-                            "name" => "Bestelling Socrates microdosing"
-                        ],
-                        "unit_amount" => str_replace(".", "", $price)
-                    ],
-                    "quantity" => 1
-                ]
+        $payment = Mollie::api()->payments()->create([
+            "amount" => [
+                "currency" => "EUR",
+                "value" => $price,
             ],
-            "mode" => "payment",
-            "success_url" => route("success"),
-            "cancel_url" => route("home")
+            "description" => "Socrates Microdosing",
+            "redirectUrl" => route("success"),
+            "cancelUrl" => route("home"),
+            "webhookUrl"  => "https://webshop.example.org/mollie-webhook/",
         ]);
 
-        return redirect()->away($session->url);
+        return redirect($payment->getCheckoutUrl(), 303);
     }
 
     public function success()
     {
+        dd("test");
         $pdfName = time();
         $totalPrice = 0;
 

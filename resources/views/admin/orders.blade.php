@@ -8,7 +8,7 @@
         @endif
         <div class="row gap-2 justify-content-center">
             @foreach($orders as $order)
-            <div class="col-3 card">
+            <div class="col-lg-3 col-10 card">
                <div class="card-body">
                    <h5 class="card-title">{{$order->firstname . " " . $order->prefix . " " . $order->lastname}}</h5>
                    <h6 class="card-subtitle mb-2 text-muted">{{$order->created_at}}</h6>
