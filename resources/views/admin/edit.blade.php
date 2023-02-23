@@ -18,11 +18,11 @@
         <form id="editForm" action="{{route("admin.products.update", $product->id)}}" method="POST" class="row gap-2" enctype="multipart/form-data">
             @csrf
             @method("PUT")
-            <div class="form-group col-5">
+            <div class="form-group col-lg-5 col-12">
                 <label>Naam:</label>
                 <input type="text" value="{{$product->name}}" class="form-control" name="name">
             </div>
-            <div class="form-group col-5">
+            <div class="form-group col-lg-5 col-12">
                 <label>Voorraad:</label>
                 <input type="text" value="{{$product->amount}}" class="form-control" name="amount">
             </div>
@@ -44,7 +44,7 @@
                 <label class="form-check-label" for="flexSwitchCheckDefault">Sold out</label>
             </div>
             <input type="text" name="hiddenImage" value="{{$product->image}}" hidden>
-            <div class="form-group col-5">
+            <div class="form-group col-lg-5 col-12">
                 <label>Omschrijving:</label>
                 <textarea id="description" class="form-control" name="description" cols="30" rows="10" style="display: none">
                     {{$product->description}}
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary col-3" value="Aanpassen">
+                <input type="submit" class="btn btn-primary col-lg-3 col-12" value="Aanpassen">
             </div>
         </form>
             <hr>
@@ -74,11 +74,11 @@
 
                     @csrf
                     @method("POST")
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-5 col-12">
                         <label for="">Naam:</label>
                         <input type="text" name="choiceName" class="form-control">
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-5 col-12">
                         <label for="">Prijs:</label>
                         <input type="number" name="choicePrice" class="form-control" step=".01">
                     </div>
@@ -88,11 +88,6 @@
                 </form>
             </div>
             <br>
-        <form action="{{route("admin.products.destroy", $product->id)}}" method="post">
-            @csrf
-            @method("DELETE")
-            <input type="submit" value="Product verwijderen" class="btn btn-danger">
-        </form>
         <hr>
         <div class="mt-4">
             <h4>Meerdere afbeeldingen toevoegen:</h4>
@@ -119,6 +114,11 @@
                 <div class="form-group mt-2">
                     <input type="submit" class="btn btn-primary" value="Uploaden">
                 </div>
+            </form>
+            <form action="{{route("admin.products.destroy", $product->id)}}" method="post" class="my-2">
+                @csrf
+                @method("DELETE")
+                <input type="submit" value="Product verwijderen" class="btn btn-danger">
             </form>
         </div>
     </div>
